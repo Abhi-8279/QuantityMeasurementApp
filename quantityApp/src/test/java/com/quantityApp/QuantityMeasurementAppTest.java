@@ -41,3 +41,33 @@ class QuantityMeasurementAppTest {
         assertTrue(f1.equals(f1), "Object should equal itself");
     }
 }
+// INCH TESTS
+@Test
+void testInchEquality_SameValue() {
+    assertTrue(QuantityMeasurementApp.compareInches(1.0, 1.0));
+}
+
+@Test
+void testInchEquality_DifferentValue() {
+    assertFalse(QuantityMeasurementApp.compareInches(1.0, 2.0));
+}
+
+@Test
+void testInchEquality_NullComparison() {
+    QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
+    assertFalse(i.equals(null));
+}
+
+@Test
+void testInchEquality_NonNumericInput() {
+    QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
+    assertFalse(i.equals("text"));
+}
+
+@Test
+void testInchEquality_SameReference() {
+    QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
+    assertTrue(i.equals(i));
+}
+}
+
