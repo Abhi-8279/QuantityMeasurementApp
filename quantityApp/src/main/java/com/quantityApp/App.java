@@ -1,7 +1,7 @@
 package com.quantityApp;
+public class App {
 
-public class QuantityMeasurementApp {
-	// Inner class representing Feet measurement
+    // Inner class representing Feet measurement
     public static class Feet {
         private final double value;
 
