@@ -6,8 +6,7 @@ class AppTest {
 
     // FEET TESTS
     @Test
-    void testFeetEquality_SameValue() {
-        assertTrue(App.compareFeet(1.0, 1.0));
+    void testFeetEquality_SameValue() {        assertTrue(App.compareFeet(1.0, 1.0));
     }
 
     @Test
