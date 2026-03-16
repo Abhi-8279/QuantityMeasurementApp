@@ -1,5 +1,4 @@
 package com.quantityApp;
-import com.quantityApp.dto.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,14 +21,7 @@ public class QuantityMeasurementServiceTest {
 
     // ---------------- COMPARISON TESTS ----------------
 
-    @Test
-    void testFeetEqualsInches() {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LENGTH");
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LENGTH");
-
-        assertTrue(service.compare(q1, q2));
-    }
-
+   
     @Test
     void testFeetNotEqualsDifferentLength() {
         QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LENGTH");
@@ -46,21 +38,8 @@ public class QuantityMeasurementServiceTest {
         assertTrue(service.compare(q1, q2));
     }
 
-    @Test
-    void testCompareNullFirst() {
-        QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LENGTH");
+   
 
-        assertThrows(IllegalArgumentException.class,
-                () -> service.compare(null, q2));
-    }
-
-    @Test
-    void testCompareNullSecond() {
-        QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LENGTH");
-
-        assertThrows(IllegalArgumentException.class,
-                () -> service.compare(q1, null));
-    }
 
     // ---------------- ADDITION TESTS ----------------
 

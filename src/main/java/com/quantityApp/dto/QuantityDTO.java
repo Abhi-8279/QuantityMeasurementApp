@@ -6,8 +6,6 @@ public class QuantityDTO {
     private String unit;
     private String measurementType;
 
-    public QuantityDTO() {}
-
     public QuantityDTO(double value, String unit, String measurementType) {
         this.value = value;
         this.unit = unit;

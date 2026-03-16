@@ -29,4 +29,16 @@ public class QuantityMeasurementCacheRepository
     public List<QuantityMeasurementEntity> findAll() {
         return cache;
     }
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<QuantityMeasurementEntity> getAllMeasurements() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

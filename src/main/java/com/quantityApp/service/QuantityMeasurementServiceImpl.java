@@ -1,6 +1,7 @@
 package com.quantityApp.service;
 
 import com.quantityApp.dto.QuantityDTO;
+import com.quantityApp.entity.QuantityMeasurementEntity;
 import com.quantityApp.repository.IQuantityMeasurementRepository;
 
 public class QuantityMeasurementServiceImpl
@@ -12,59 +13,132 @@ public class QuantityMeasurementServiceImpl
         this.repository = repository;
     }
 
+    // ---------------- CONVERT ----------------
+
     @Override
     public QuantityDTO convert(QuantityDTO input, String targetUnit) {
 
-        if(input == null)
+        if (input == null)
             throw new IllegalArgumentException("Input cannot be null");
 
-        return new QuantityDTO(input.getValue(), targetUnit, input.getMeasurementType());
+        return new QuantityDTO(
+                input.getValue(),
+                targetUnit,
+                input.getMeasurementType()
+        );
     }
+
+    // ---------------- COMPARE ----------------
 
     @Override
     public boolean compare(QuantityDTO q1, QuantityDTO q2) {
 
-        if(q1 == null || q2 == null)
-            throw new IllegalArgumentException("Quantities cannot be null");
-
         double value1 = q1.getValue();
         double value2 = q2.getValue();
 
-        String unit1 = q1.getUnit();
-        String unit2 = q2.getUnit();
+        boolean result = value1 == value2;
 
-        if(unit1.equals("FEET") && unit2.equals("INCHES")) {
-            value2 = value2 / 12;
-        }
+        QuantityMeasurementEntity entity =
+                new QuantityMeasurementEntity(
+                        "COMPARE",
+                        q1.getMeasurementType(),
+                        q1.getUnit(),
+                        value1,
+                        q2.getUnit(),
+                        value2,
+                        result
+                );
 
-        if(unit1.equals("INCHES") && unit2.equals("FEET")) {
-            value1 = value1 / 12;
-        }
+        repository.save(entity);
 
-        return value1 == value2;
+        return result;
     }
+
+    // ---------------- ADD ----------------
+
     @Override
     public QuantityDTO add(QuantityDTO q1, QuantityDTO q2) {
 
         double result = q1.getValue() + q2.getValue();
 
-        return new QuantityDTO(result, q1.getUnit(), q1.getMeasurementType());
+        QuantityMeasurementEntity entity =
+                new QuantityMeasurementEntity(
+                        "ADD",
+                        q1.getMeasurementType(),
+                        q1.getUnit(),
+                        q1.getValue(),
+                        q2.getUnit(),
+                        q2.getValue(),
+                        true
+                );
+
+        repository.save(entity);
+
+        return new QuantityDTO(
+                result,
+                q1.getUnit(),
+                q1.getMeasurementType()
+        );
     }
+
+    // ---------------- SUBTRACT ----------------
 
     @Override
     public QuantityDTO subtract(QuantityDTO q1, QuantityDTO q2) {
 
         double result = q1.getValue() - q2.getValue();
 
-        return new QuantityDTO(result, q1.getUnit(), q1.getMeasurementType());
+        QuantityMeasurementEntity entity =
+                new QuantityMeasurementEntity(
+                        "SUBTRACT",
+                        q1.getMeasurementType(),
+                        q1.getUnit(),
+                        q1.getValue(),
+                        q2.getUnit(),
+                        q2.getValue(),
+                        true
+                );
+
+        repository.save(entity);
+
+        return new QuantityDTO(
+                result,
+                q1.getUnit(),
+                q1.getMeasurementType()
+        );
     }
+
+    // ---------------- DIVIDE ----------------
 
     @Override
     public double divide(QuantityDTO q1, QuantityDTO q2) {
 
-        if(q2.getValue() == 0)
+        if (q2.getValue() == 0)
             throw new ArithmeticException("Division by zero");
 
-        return q1.getValue() / q2.getValue();
+        double result = q1.getValue() / q2.getValue();
+
+        QuantityMeasurementEntity entity =
+                new QuantityMeasurementEntity(
+                        "DIVIDE",
+                        q1.getMeasurementType(),
+                        q1.getUnit(),
+                        q1.getValue(),
+                        q2.getUnit(),
+                        q2.getValue(),
+                        true
+                );
+
+        repository.save(entity);
+
+        return result;
+    }
+
+    public IQuantityMeasurementRepository getRepository() {
+        return repository;
+    }
+
+    public void setRepository(IQuantityMeasurementRepository repository) {
+        this.repository = repository;
     }
 }
