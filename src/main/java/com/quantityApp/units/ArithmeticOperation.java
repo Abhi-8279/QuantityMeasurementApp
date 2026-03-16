@@ -1,5 +1,4 @@
-package com.quantityApp;
-
+package com.quantityApp.units;
 import java.util.function.DoubleBinaryOperator;
 
 public enum ArithmeticOperation {
