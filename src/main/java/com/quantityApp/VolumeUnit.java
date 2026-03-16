@@ -18,17 +18,24 @@ public enum VolumeUnit implements IMeasurable {
     }
 
     @Override
-    public double convertToBaseUnit(double value) {
+    public String getUnitName() {
+        return name();
+    }
+
+    // Convert unit → base unit (LITRE)
+    @Override
+    public double toBaseUnit(double value) {
         return value * conversionFactor;
     }
 
+    // Convert base unit → target unit
     @Override
-    public double convertFromBaseUnit(double baseValue) {
-        return baseValue / conversionFactor;
+    public double fromBaseUnit(double value) {
+        return value / conversionFactor;
     }
 
     @Override
-    public String getUnitName() {
-        return name();
+    public void validateOperationSupport(String operation) {
+        // Volume supports arithmetic operations
     }
 }

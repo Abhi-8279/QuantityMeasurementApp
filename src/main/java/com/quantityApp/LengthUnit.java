@@ -22,4 +22,21 @@ public enum LengthUnit implements IMeasurable {
     public String getUnitName() {
         return name();
     }
+
+    // Convert unit → base unit (FEET)
+    @Override
+    public double toBaseUnit(double value) {
+        return value * conversionFactor;
+    }
+
+    // Convert base unit → this unit
+    @Override
+    public double fromBaseUnit(double value) {
+        return value / conversionFactor;
+    }
+
+    @Override
+    public void validateOperationSupport(String operation) {
+        // Length supports arithmetic operations
+    }
 }

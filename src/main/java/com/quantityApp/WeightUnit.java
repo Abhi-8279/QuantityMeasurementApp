@@ -21,4 +21,21 @@ public enum WeightUnit implements IMeasurable {
     public String getUnitName() {
         return name();
     }
+
+    // Convert to base unit (KILOGRAM)
+    @Override
+    public double toBaseUnit(double value) {
+        return value * conversionFactor;
+    }
+
+    // Convert from base unit
+    @Override
+    public double fromBaseUnit(double value) {
+        return value / conversionFactor;
+    }
+
+    @Override
+    public void validateOperationSupport(String operation) {
+        // Weight supports arithmetic operations
+    }
 }
