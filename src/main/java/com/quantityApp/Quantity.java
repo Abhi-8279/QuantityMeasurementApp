@@ -1,22 +1,10 @@
 package com.quantityApp;
-
-import java.util.Objects;
-
-public final class Quantity<U extends IMeasurable> {
+public class Quantity<U extends IMeasurable> {
 
     private final double value;
     private final U unit;
 
-    private static final double EPSILON = 1e-6;
-
     public Quantity(double value, U unit) {
-
-        if (!Double.isFinite(value))
-            throw new IllegalArgumentException("Value must be finite");
-
-        if (unit == null)
-            throw new IllegalArgumentException("Unit cannot be null");
-
         this.value = value;
         this.unit = unit;
     }
@@ -28,63 +16,72 @@ public final class Quantity<U extends IMeasurable> {
     public U getUnit() {
         return unit;
     }
-    private double toBaseUnit() {
-        return unit.convertToBaseUnit(value);
+
+  
+
+    public Quantity<U> subtract(Quantity<U> other) {
+        return subtract(other, this.unit);
     }
 
-    public Quantity<U> convertTo(U targetUnit) {
+    public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
 
-        if (targetUnit == null)
+        validate(other);
+
+        if (targetUnit == null) {
             throw new IllegalArgumentException("Target unit cannot be null");
+        }
 
-        double base = toBaseUnit();
-        double converted = targetUnit.convertFromBaseUnit(base);
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
 
-        // Round to 2 decimals
-        converted = Math.round(converted * 100.0) / 100.0;
+        double baseResult = base1 - base2;
 
-        return new Quantity<>(converted, targetUnit);
+        double result =
+                targetUnit.convertFromBaseUnit(baseResult);
+
+        result = round(result);
+
+        return new Quantity<>(result, targetUnit);
     }
 
-    @Override
-    public boolean equals(Object obj) {
 
-        if (this == obj) return true;
-        if (!(obj instanceof Quantity<?> other)) return false;
+    public double divide(Quantity<U> other) {
 
-        // Cross-category prevention
-        if (this.unit.getClass() != other.unit.getClass())
-            return false;
+        validate(other);
 
-        return Math.abs(this.toBaseUnit() - other.toBaseUnit()) < EPSILON;
-    }
-    public Quantity<U> add(Quantity<U> other) {
-        return add(other, this.unit);
-    }
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
 
-    public Quantity<U> add(Quantity<U> other, U targetUnit) {
+        if (base2 == 0) {
+            throw new ArithmeticException("Division by zero");
+        }
 
-        if (other == null)
-            throw new IllegalArgumentException("Other quantity cannot be null");
-
-        if (targetUnit == null)
-            throw new IllegalArgumentException("Target unit cannot be null");
-
-        double sumBase = this.toBaseUnit() + other.toBaseUnit();
-        double finalValue = targetUnit.convertFromBaseUnit(sumBase);
-
-        finalValue = Math.round(finalValue * 100.0) / 100.0;
-
-        return new Quantity<>(finalValue, targetUnit);
+        return base1 / base2;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(toBaseUnit(), unit.getClass());
+    private void validate(Quantity<U> other) {
+
+        if (other == null) {
+            throw new IllegalArgumentException("Quantity cannot be null");
+        }
+
+        if (!unit.getClass().equals(other.unit.getClass())) {
+            throw new IllegalArgumentException("Different measurement categories");
+        }
+
+        if (Double.isNaN(value) || Double.isInfinite(value)
+                || Double.isNaN(other.value) || Double.isInfinite(other.value)) {
+
+            throw new IllegalArgumentException("Invalid numeric value");
+        }
     }
 
     @Override
     public String toString() {
-        return "Quantity(" + value + ", " + unit.getUnitName() + ")";
+        return value + " " + unit;
+    }
+
+    private double round(double val) {
+        return Math.round(val * 100.0) / 100.0;
     }
 }
