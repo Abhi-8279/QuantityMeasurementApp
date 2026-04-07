@@ -1,15 +1,5 @@
 package com.quantityApp.repository;
 
-import com.quantityApp.entity.QuantityMeasurementEntity;
-import java.util.List;
-
+@Deprecated
 public interface IQuantityMeasurementRepository {
-
-    void save(QuantityMeasurementEntity entity);
-
-    List<QuantityMeasurementEntity> findAll();
-
-	void deleteAll();
-
-	List<QuantityMeasurementEntity> getAllMeasurements();
 }

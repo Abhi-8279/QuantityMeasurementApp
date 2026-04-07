@@ -1,10 +1,12 @@
 package com.quantityApp.units;
+
 import java.util.function.DoubleBinaryOperator;
 
 public enum ArithmeticOperation {
 
     ADD((a, b) -> a + b),
     SUBTRACT((a, b) -> a - b),
+    MULTIPLY((a, b) -> a * b),
     DIVIDE((a, b) -> a / b);
 
     private final DoubleBinaryOperator operator;

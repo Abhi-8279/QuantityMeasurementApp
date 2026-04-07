@@ -1,35 +1,40 @@
 package com.quantityApp.dto;
 
+import com.quantityApp.validation.ValidQuantityUnit;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+@ValidQuantityUnit
 public class QuantityDTO {
 
-    private double value;
+    @NotNull(message = "Value is required")
+    private Double value;
+
+    @NotBlank(message = "Unit is required")
     private String unit;
+
+    @NotBlank(message = "Measurement type is required")
     private String measurementType;
 
-    public QuantityDTO(double value, String unit, String measurementType) {
-        this.value = value;
-        this.unit = unit;
-        this.measurementType = measurementType;
+    public Double getValue() {
+        return value;
     }
 
-    public double getValue() {
-        return value;
+    public void setValue(Double value) {
+        this.value = value;
     }
 
     public String getUnit() {
         return unit;
     }
 
-    public String getMeasurementType() {
-        return measurementType;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
-
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public String getMeasurementType() {
+        return measurementType;
     }
 
     public void setMeasurementType(String measurementType) {

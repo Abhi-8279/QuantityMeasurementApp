@@ -1,4 +1,4 @@
-package com.quantityApp.app;
+package com.quantityApp.units;
 
 public final class QuantityMeasurementApp {
 

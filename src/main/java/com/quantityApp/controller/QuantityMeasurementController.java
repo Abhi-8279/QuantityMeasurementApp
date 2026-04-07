@@ -1,52 +1,80 @@
 package com.quantityApp.controller;
 
-import com.quantityApp.dto.QuantityDTO;
+import java.util.List;
+
+import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.quantityApp.dto.QuantityInputDTO;
+import com.quantityApp.model.QuantityMeasurementDTO;
 import com.quantityApp.service.IQuantityMeasurementService;
 
+import jakarta.validation.Valid;
+
+@Validated
+@RestController
+@RequestMapping(value = "/api/v1/quantities", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 public class QuantityMeasurementController {
 
-    private IQuantityMeasurementService service;
+    private final IQuantityMeasurementService service;
 
     public QuantityMeasurementController(IQuantityMeasurementService service) {
         this.service = service;
     }
 
-    public void performAddition(QuantityDTO q1, QuantityDTO q2) {
-
-        QuantityDTO result = service.add(q1, q2);
-
-        System.out.println("Addition Result: " + result.getValue() + " " + result.getUnit());
+    @PostMapping(value = "/compare", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public QuantityMeasurementDTO compare(@Valid @RequestBody QuantityInputDTO input) {
+        return service.compare(input);
     }
 
-    public void performComparison(QuantityDTO q1, QuantityDTO q2) {
-
-        boolean result = service.compare(q1, q2);
-
-        System.out.println("Are equal: " + result);
+    @PostMapping(value = "/convert", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public QuantityMeasurementDTO convert(@Valid @RequestBody QuantityInputDTO input) {
+        return service.convert(input);
     }
 
-    public void run() {
+    @PostMapping(value = "/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public QuantityMeasurementDTO add(@Valid @RequestBody QuantityInputDTO input) {
+        return service.add(input);
+    }
 
-        System.out.println("Starting Quantity Measurement Application...");
+    @PostMapping(value = "/subtract", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public QuantityMeasurementDTO subtract(@Valid @RequestBody QuantityInputDTO input) {
+        return service.subtract(input);
+    }
 
-        // Length comparison example
-        QuantityDTO inch = new QuantityDTO(12.0, "INCHES", "LENGTH");
-        QuantityDTO foot = new QuantityDTO(1.0, "FEET", "LENGTH");
+    @PostMapping(value = "/multiply", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public QuantityMeasurementDTO multiply(@Valid @RequestBody QuantityInputDTO input) {
+        return service.multiply(input);
+    }
 
-        performComparison(inch, foot);
+    @PostMapping(value = "/divide", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public QuantityMeasurementDTO divide(@Valid @RequestBody QuantityInputDTO input) {
+        return service.divide(input);
+    }
 
-        // Length addition example
-        QuantityDTO foot1 = new QuantityDTO(1, "FEET", "LENGTH");
-        QuantityDTO foot2 = new QuantityDTO(2, "FEET", "LENGTH");
+    @GetMapping("/history/operation/{operation}")
+    public List<QuantityMeasurementDTO> getHistoryByOperation(@PathVariable String operation) {
+        return service.getHistoryByOperation(operation);
+    }
 
-        performAddition(foot1, foot2);
+    @GetMapping("/history/type/{measurementType}")
+    public List<QuantityMeasurementDTO> getHistoryByMeasurementType(@PathVariable String measurementType) {
+        return service.getHistoryByMeasurementType(measurementType);
+    }
 
-        // Weight comparison example
-        QuantityDTO gram = new QuantityDTO(1000, "GRAM", "WEIGHT");
-        QuantityDTO kg = new QuantityDTO(1, "KILOGRAM", "WEIGHT");
+    @GetMapping("/history/errored")
+    public List<QuantityMeasurementDTO> getErrorHistory() {
+        return service.getErrorHistory();
+    }
 
-        performComparison(gram, kg);
-
-        System.out.println("Application execution completed.");
+    @GetMapping("/count/{operation}")
+    public long getOperationCount(@PathVariable String operation) {
+        return service.getOperationCount(operation);
     }
 }

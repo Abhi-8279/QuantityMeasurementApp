@@ -4,8 +4,8 @@ import com.quantityApp.units.IMeasurable;
 
 public class QuantityModel<U extends IMeasurable> {
 
-    private double value;
-    private U unit;
+    private final double value;
+    private final U unit;
 
     public QuantityModel(double value, U unit) {
         this.value = value;
