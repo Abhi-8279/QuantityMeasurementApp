@@ -1,7 +1,0 @@
-package com.quantityApp.app;
-
-public final class QuantityMeasurementApp {
-
-    private QuantityMeasurementApp() {
-    }
-}

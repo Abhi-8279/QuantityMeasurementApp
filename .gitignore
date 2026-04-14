@@ -1,6 +1,5 @@
 /target/
-/.apt_generated/
-/.apt_generated_tests/
-/dump/
-/.m2repo/
+/bin/
 /.tools/
+/frontend/node_modules/
+/frontend/dist/
